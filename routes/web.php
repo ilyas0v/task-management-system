@@ -15,6 +15,9 @@ Route::group(['prefix' => 'admin' , 'middleware' => 'auth'], function(){
 
     Route::get('/',  'DashboardController@index');
 
+    Route::resource('permissions',    'PermissionController');
+    Route::resource('user_roles',     'UserRoleController');
+
 });
 
 

@@ -7,7 +7,7 @@
                     <div class="container-fluid">
 
                         
-                        @include('admin.news.header')
+                        @include('admin.user_roles.header')
 
                         <!-- TABLE -->
 
@@ -19,33 +19,21 @@
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <td>Image</td>
-                                                <th>Title</th>
-                                                <td>Category</td>
-                                                <th>Description</th>
-                                                <th>Status</th>
-                                                <th>Date</th>
+                                                <th>Name</th>
                                                 <th>Operations</th>
                                             </tr>
                                         </thead>
                                         <tbody>
 
-                                            @foreach($news as $n)
+                                            @foreach($user_roles as $p)
                                                 <tr>
-                                                    <td>{{ $n->id }}</td>
-                                                    <td>
-                                                        <img src="/storage/news/{{ $n->image }}" alt="" width="200">
-                                                    </td>
-                                                    <td>{{ $n->title }}</td>
-                                                    <td>{{ $n->category ? $n->category->name : '' }}</td>
-                                                    <td>{{ $n->description }}</td>
-                                                    <td class="process">{{ $n->status }}</td>
-                                                    <td>{{ $n->created_at }}</td>
-                                                    <td>
-                                                        <a href="{{ route('news.show', $n->id) }}" class="btn btn-primary">Show</a>
-                                                        <a href="{{ route('news.edit', $n->id) }}" class="btn btn-secondary">Edit</a>
+                                                    <td>{{ $p->id }}</td>
+                                                    <td>{{ $p->name }}</td>
 
-                                                        <form action="{{ route('news.destroy', $n->id) }}" method="POST" onsubmit="return confirm('Silmek istediyinizden eminsinizmi?')">
+                                                    <td>
+                                                        <a href="{{ route('user_roles.edit', $p->id) }}" class="btn btn-secondary">Edit</a>
+
+                                                        <form action="{{ route('user_roles.destroy', $p->id) }}" method="POST" onsubmit="return confirm('Silmek istediyinizden eminsinizmi?')">
                                                             @csrf
                                                             @method('DELETE')
                                                             <input type="submit" class="btn btn-danger" value="Delete">

@@ -7,7 +7,7 @@
                     <div class="container-fluid">
 
                         
-                        @include('admin.news_category.header')
+                        @include('admin.permissions.header')
 
                         <!-- TABLE -->
 
@@ -20,27 +20,22 @@
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Name</th>
-                                                <th>Parent</th>
-                                                <th>Status</th>
-                                                <th>Order</th>
-                                                <th>Date</th>
+                                                <th>Code</th>
                                                 <th>Operations</th>
                                             </tr>
                                         </thead>
                                         <tbody>
 
-                                            @foreach($news_categories as $n)
+                                            @foreach($permissions as $p)
                                                 <tr>
-                                                    <td>{{ $n->id }}</td>
-                                                    <td>{{ $n->name }}</td>
-                                                    <td>{{ $n->parent ? $n->parent->name : '' }}</td>
-                                                    <td class="process">{{ $n->status }}</td>
-                                                    <td>{{ $n->order }}</td>
-                                                    <td>{{ $n->created_at }}</td>
-                                                    <td>
-                                                        <a href="{{ route('news_category.edit', $n->id) }}" class="btn btn-secondary">Edit</a>
+                                                    <td>{{ $p->id }}</td>
+                                                    <td>{{ $p->name }}</td>
+                                                    <td>{{ $p->permission_code }}</td>
 
-                                                        <form action="{{ route('news_category.destroy', $n->id) }}" method="POST" onsubmit="return confirm('Silmek istediyinizden eminsinizmi?')">
+                                                    <td>
+                                                        <a href="{{ route('permissions.edit', $p->id) }}" class="btn btn-secondary">Edit</a>
+
+                                                        <form action="{{ route('permissions.destroy', $p->id) }}" method="POST" onsubmit="return confirm('Silmek istediyinizden eminsinizmi?')">
                                                             @csrf
                                                             @method('DELETE')
                                                             <input type="submit" class="btn btn-danger" value="Delete">

@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\NewsCategory;
 
-class NewsCategoryController extends Controller
+class PermissionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +13,8 @@ class NewsCategoryController extends Controller
      */
     public function index()
     {
-        $news_categories = NewsCategory::all();
-        return view('admin.news_category.index', compact('news_categories'));
+        $permissions = \App\Permission::all();
+        return view('admin.permissions.index', compact('permissions'));
     }
 
     /**
@@ -25,8 +24,7 @@ class NewsCategoryController extends Controller
      */
     public function create()
     {
-        $categories = NewsCategory::all();
-        return view('admin.news_category.create', compact('categories'));
+        return view('admin.permissions.create');
     }
 
     /**
@@ -37,30 +35,20 @@ class NewsCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'parent_id' => 'integer|exists:news_categories,id|nullable',
-            'name'      => 'string|max:100',
-            'status'    => 'boolean|nullable',
-            'order'     => 'integer|max:10000|nullable',
+        $this->validate($request , [
+            'name' => 'required|max:200',
+            'permission_code' => 'required|max:100',
         ]);
 
+        $p = new \App\Permission();
 
-        $category  =  NewsCategory::create([
-            'parent_id' => $request->parent_id,
-            'name'      => $request->name,
-            'status'    => $request->status,
-            'order'     => $request->order,
-        ]);
+        $p->name = $request->name;
+        $p->permission_code = $request->permission_code;
 
-        \Session::flash('success_message', 'Kategoriya əlavə olundu');
-        return redirect()->route('news_category.index');
+        $p->save();
 
-        // $category = new NewsCategory();
-        // $category->parent_id = $request->parent_id;
-        // $category->name      = $request->name;   
-        // $category->status    = $request->status;   
-        // $category->order     = $request->order;
-        // $category->save();
+        \Session::flash('success_message' , 'Permission created');
+        return redirect()->route('permissions.index');
     }
 
     /**
@@ -82,7 +70,9 @@ class NewsCategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $permission = \App\Permission::findOrFail($id);
+
+        return view('admin.permissions.edit', compact('permission'));
     }
 
     /**
@@ -94,7 +84,20 @@ class NewsCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request , [
+            'name' => 'required|max:200',
+            'permission_code' => 'required|max:100',
+        ]);
+
+        $p = \App\Permission::findOrFail($id);
+
+        $p->name = $request->name;
+        $p->permission_code = $request->permission_code;
+
+        $p->save();
+
+        \Session::flash('success_message' , 'Permission updated');
+        return redirect()->route('permissions.index');
     }
 
     /**
@@ -105,6 +108,11 @@ class NewsCategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $p = \App\Permission::findOrFail($id);
+
+        $p->delete();
+
+        \Session::flash('success_message' , 'Permission deleted');  
+        return redirect()->route('permissions.index');
     }
 }
