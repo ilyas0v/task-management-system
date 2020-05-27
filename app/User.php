@@ -10,13 +10,37 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+
+
+    public function role()
+    {
+        return $this->belongsTo(UserRole::class, 'role_id');
+    }
+
+
+
+    public function has_permission($permission)
+    {
+        $role = $this->role;
+
+        if($role)
+        {
+            $permission = $role->permissions()->where('permission_code', $permission)->first();
+
+            if($permission)
+                return true;
+        }
+
+        return false;
+    }
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'role_id'
     ];
 
     /**

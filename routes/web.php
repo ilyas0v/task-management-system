@@ -11,12 +11,13 @@
 |
 */
 
-Route::group(['prefix' => 'admin' , 'middleware' => 'auth'], function(){
+Route::group(['prefix' => 'admin' , 'middleware' => ['auth', 'role'] ], function(){
 
-    Route::get('/',  'DashboardController@index');
+    Route::get('/',  'DashboardController@index')->name('dashboard.index');
 
     Route::resource('permissions',    'PermissionController');
     Route::resource('user_roles',     'UserRoleController');
+    Route::resource('users',          'UserController');
 
 });
 
