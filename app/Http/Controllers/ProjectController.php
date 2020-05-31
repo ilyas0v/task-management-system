@@ -13,7 +13,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = \App\Project::all();
+        $projects = \Auth::user()->my_projects;
 
         return view('admin.projects.index', compact('projects'));
     }
@@ -67,7 +67,9 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        //
+        $project = \App\Project::findOrFail($id);
+        
+        return view('admin.projects.show', compact('project'));
     }
 
     /**
@@ -78,7 +80,7 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
-        $project = \App\Project::findOrFail($id);
+        $project = \Auth::user()->my_projects()->findOrFail($id);
 
         return view('admin.projects.edit', compact('project'));
     }
@@ -97,7 +99,7 @@ class ProjectController extends Controller
             'icon' => 'image|mimes:jpeg,jpg,png,svg,gif',
         ]);
 
-        $p = \App\Project::findOrFail($id);
+        $p = \Auth::user()->my_projects()->findOrFail($id);
 
         $p->name = $request->name;
 
@@ -121,7 +123,7 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        $project = \App\Project::findOrFail($id);
+        $project = \Auth::user()->my_projects()->findOrFail($id);
 
         $project->delete();
 
@@ -168,10 +170,37 @@ class ProjectController extends Controller
 
         $project = \App\Project::findOrFail($id);
 
+        $users_ids_added_before = $project->user_ids(); // [1,2]
+        
         $project->users()->sync($request->users);
+        
+        $user_ids = $request->users; // [1,2,3]
+
+        $user_ids = array_diff($user_ids, $users_ids_added_before);
+        
+        $users = \App\User::whereIn('id', $user_ids)->get(); // WHERE id in (1,2,3)
+
+        foreach($users as $user)
+        {
+            $this->send_mail($user, $project);
+        }
 
 
         \Session::flash('success_message', 'Users updated');
         return redirect()->route('projects.index');
     }  
+
+
+    public function send_mail($user, $project)
+    {
+        $data = [ 'project' => $project, 'user' => $user ];
+
+        \Mail::send('email.project_notification', $data, function($message) use ($user, $project){
+
+            $message->to($user->email, $user->name)->subject
+                ('Project notification');
+            $message->from('laraveldev123@gmail.com','Task management system');
+        });
+
+    }
 }

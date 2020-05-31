@@ -34,6 +34,19 @@ class User extends Authenticatable
         return false;
     }
 
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'project_users' , 'user_id' , 'project_id');
+    }
+
+
+
+    public function my_projects()
+    {
+        return $this->hasMany(Project::class, 'user_id');
+    }
+
     /**
      * The attributes that are mass assignable.
      *

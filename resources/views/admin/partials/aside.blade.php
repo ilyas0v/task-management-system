@@ -39,6 +39,29 @@
                         </li>
                         @endif
 
+
+                        @if(\Auth::user()->has_permission('projects'))
+                        <li>
+                            <a href="{{ route('projects.index') }}"">
+                                <i class="fas fa-user"></i>Projects</a>
+                        </li>
+                        @endif
+
+                        <hr>
+
+
+                        <li class="has-sub">
+                            <a class="js-arrow open" href="#">
+                                <i class="fas fa-desktop"></i>Projects</a>
+                            <ul class="list-unstyled navbar__sub-list js-sub-list" style="display: block;">
+                                @foreach(\Auth::user()->projects as $project)
+                                    <li>
+                                        <a href="{{ route('projects.show', $project->id) }}"><img src="/storage/projects/{{ $project->icon }}" width="20px"> {{ $project->name }}</a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </li>
+
                     </ul>
                 </nav>
             </div>
