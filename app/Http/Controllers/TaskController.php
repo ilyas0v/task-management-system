@@ -47,7 +47,7 @@ class TaskController extends Controller
         $this->validate($request, [
             'name' => 'required|string|max:100',
             'description' => 'string|max:10000',
-            'file' => 'file|nullable|max:10240|mimes:jpeg,png,doc,docx,xls,xlsx,pdf,txt',
+            'file' => 'file|nullable|max:10240|mimes:jpeg,png,doc,docx,xls,xlsx,pdf,txt,svg',
             'deadline' => 'date|nullable',
             'project_id' => 'integer|required|exists:projects,id',
         ]);
@@ -78,7 +78,9 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        //
+        $task = \App\Task::findOrFail($id);
+
+        return view('admin.tasks.show', compact('task'));
     }
 
     /**
@@ -113,5 +115,40 @@ class TaskController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+
+    public function assign(Request $request, $id)
+    {
+        $this->validate($request, [
+            'users.*' => 'integer|exists:users,id'
+        ]);
+
+        $task = \App\Task::findOrFail($id);
+        
+        $task->assigned_users()->sync($request->users);
+
+        \Session::flash('success_message', 'Users assigned');
+
+        return back();
+    }
+
+
+
+    public function comment(Request $request, $id)
+    {
+        $this->validate($request, [
+            'comment' => 'required|max:3000|string'
+        ]);
+
+        $task = \App\Task::findOrFail($id);
+
+        $task->comments()->create([
+            'body' => $request->comment,
+            'user_id' => \Auth::user()->id,
+        ]);
+
+        return back();
     }
 }

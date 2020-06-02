@@ -3,12 +3,6 @@
 
 @section('content')
 
-<style>
-.modal-backdrop.show {
-    z-index: 10 !important;
-}
-</style>
-
 <div class="main-content">
                 <div class="section__content section__content--p30">
                     <div class="container-fluid">

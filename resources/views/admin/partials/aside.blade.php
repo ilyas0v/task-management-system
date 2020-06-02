@@ -51,9 +51,25 @@
 
 
                         <li class="has-sub">
-                            <a class="js-arrow open" href="#">
+                            <a class="js-arrow" href="#">
+                                <i class="fas fa-desktop"></i>My projects</a>
+                            <ul class="list-unstyled navbar__sub-list js-sub-list">
+                                @foreach(\Auth::user()->my_projects as $project)
+                                    <li>
+                                        <a href="{{ route('projects.show', $project->id) }}"><img src="/storage/projects/{{ $project->icon }}" width="20px"> {{ $project->name }}</a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </li>
+
+
+                        <hr>
+
+
+                        <li class="has-sub">
+                            <a class="js-arrow" href="#">
                                 <i class="fas fa-desktop"></i>Projects</a>
-                            <ul class="list-unstyled navbar__sub-list js-sub-list" style="display: block;">
+                            <ul class="list-unstyled navbar__sub-list js-sub-list">
                                 @foreach(\Auth::user()->projects as $project)
                                     <li>
                                         <a href="{{ route('projects.show', $project->id) }}"><img src="/storage/projects/{{ $project->icon }}" width="20px"> {{ $project->name }}</a>
