@@ -170,11 +170,11 @@ class ProjectController extends Controller
 
         $project = \App\Project::findOrFail($id);
 
-        $users_ids_added_before = $project->user_ids(); // [1,2]
+        $users_ids_added_before = $project->user_ids() ?? []; // [1,2]
         
         $project->users()->sync($request->users);
         
-        $user_ids = $request->users; // [1,2,3]
+        $user_ids = $request->users ?? []; // [1,2,3]
 
         $user_ids = array_diff($user_ids, $users_ids_added_before);
         
@@ -183,6 +183,8 @@ class ProjectController extends Controller
         foreach($users as $user)
         {
             $this->send_mail($user, $project);
+
+            $user->notify(new \App\Notifications\ProjectAssigned($project, \Auth::user()));
         }
 
 

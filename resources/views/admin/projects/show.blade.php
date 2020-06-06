@@ -9,7 +9,12 @@
 
                        <div class="row mt-4">
                            <div class="col-12 d-flex align-items-center justify-content-between">
-                               <h1><img src="/storage/projects/{{ $project->icon }}" width="50px"> {{ $project->name }}</h1>
+                               <h1>
+                                    @if($project->icon)
+                                    <img src="/storage/projects/{{ $project->icon }}" width="50px">
+                                    @endif 
+                                    {{ $project->name }}
+                                </h1>
                                 <a href="{{ route('tasks.create', ['project' => $project->id]) }}" class="btn btn-primary mt-4">Create task</a>
                            </div>
                        </div>
@@ -23,7 +28,9 @@
                                             <a href="{{ route('tasks.show', $task->id) }}">
                                                 <i class="fa fa-eye"></i> Show
                                             </a>
-                                            <button class="btn btn-success" data-toggle="modal" data-target="#task_assign_modal_{{ $i }}">Assign to user</button>
+                                            @if($task->belongs_to_me())
+                                                <button class="btn btn-success" data-toggle="modal" data-target="#task_assign_modal_{{ $i }}">Assign to user</button>
+                                            @endif
                                         </div>
                                         <p>{{ $task->description }}</p>
                                         @if($task->file)

@@ -151,4 +151,28 @@ class TaskController extends Controller
 
         return back();
     }
+
+
+
+    public function complete($id)
+    {
+        $task = \App\Task::findOrFail($id);
+        $user = \Auth::user();
+
+        $owner = $task->owner;
+
+        $complete_exists = $task->completed_users()
+                                ->where('user_id', $user->id)
+                                ->where('task_id', $id)
+                                ->first();
+
+        if(!$complete_exists){
+
+            $task->completed_users()->attach($user->id);
+            $owner->notify(new \App\Notifications\TaskCompleted($user, $task));
+        }
+
+
+        return back();
+    }
 }
