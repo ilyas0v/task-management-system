@@ -88,4 +88,18 @@ class Task extends Model
 
         return (bool) $completed;
     }
+
+
+
+    public function point_given_to_user($user)
+    {
+        $task_id  = $this->id;
+        $user_id  = $user->id;
+
+        $task_complete = \App\TaskComplete::where('task_id', $task_id)
+                                          ->where('user_id', $user_id)
+                                          ->first();
+
+        return $task_complete;
+    }
 }

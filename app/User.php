@@ -11,6 +11,13 @@ class User extends Authenticatable
     use Notifiable;
 
 
+    public function getImagePathAttribute()  # MUTATOR
+    {
+        if($this->attributes['image'])
+            return '/storage/accounts/' . $this->attributes['image'];
+
+        return asset('dashboard/images/profile.png');
+    }
 
     public function role()
     {

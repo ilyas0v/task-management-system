@@ -175,4 +175,26 @@ class TaskController extends Controller
 
         return back();
     }
+
+
+
+    public function give_point(Request $request, $id)
+    {
+        $this->validate($request, [
+            'point'     => 'integer|required|min:1|max:10',
+            'user_id'   => 'integer|required|exists:users,id',
+            'comment'   => 'string|max:10000|nullable',
+        ]);
+
+        $task_complete  = \App\TaskComplete::where('task_id', $id)
+                                           ->where('user_id', $request->user_id)
+                                           ->first();
+
+        $task_complete->point   = $request->point;
+        $task_complete->comment = $request->comment;
+
+        $task_complete->save();
+
+        return back();
+    }
 }

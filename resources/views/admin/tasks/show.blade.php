@@ -31,7 +31,11 @@
                                 <p class="mt-4">Assigned users:  
                                     @foreach($task->assigned_users as $user)
                                         @if(in_array($user->id, $task->completed_user_ids()))
-                                            <span class="badge badge-success" onclick="open_task_point_modal({{ $user->id }})">{{ $user->name }} <i class="fa fa-check"></i></span>
+                                            @if(\Auth::user()->id == $task->user_id)
+                                                <span class="badge badge-success" data-toggle="modal" data-target="#task_complete_point_modal_{{ $user->id }}">{{ $user->name }} <i class="fa fa-check"></i></span>
+                                            @else
+                                                <span class="badge badge-success" >{{ $user->name }} <i class="fa fa-check"></i></span>
+                                            @endif
                                         @else
                                             <span class="badge badge-primary">{{ $user->name }}</span>
                                         @endif
@@ -78,9 +82,9 @@
             </div>
 
 
-
+@foreach($task->assigned_users as $user)
 <!-- Modal -->
-<div class="modal fade" id="task_complete_point_modal" role="dialog">
+<div class="modal fade" id="task_complete_point_modal_{{ $user->id }}" role="dialog">
                 <div class="modal-dialog">
                 
                 <!-- Modal content-->
@@ -90,12 +94,24 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ route('tasks.assign', $task->id) }}" id="project_add_users_form" method="POST">
+
+                        @php($data = $task->point_given_to_user($user))
+
+                        @if(isset($data->point))
+                        
+                            <h5>Point: {{ $data->point }}</h5>
+                            <h5>Comment: {{ $data->comment }}</h5>
+                        
+                        @else
+
+                        <form action="{{ route('tasks.point', $task->id) }}" id="task_user_point_form" method="POST">
                             @csrf
+
+                            <input type="hidden" name="user_id"  value="{{ $user->id }}">
 
                             <label for="point" style="display:block;">
                                 Point: 
-                                <select class="form-control" id="point">
+                                <select class="form-control" id="point" name="point">
                                     @for($i=1;$i<=10;$i++)
                                         <option>{{ $i }}</option>
                                     @endfor
@@ -105,11 +121,12 @@
 
                             <label for="point" style="display:block;">
                                 Comment: 
-                                <textarea name="" class='form-control'></textarea>
+                                <textarea name="comment" class='form-control'></textarea>
                             </label>
 
                             <input type="submit" class="btn btn-success" value="OK">
                         </form>
+                        @endif
                     </div>
                     <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -118,6 +135,7 @@
                 
                 </div>
             </div>
+@endforeach
 
 
 @endsection
@@ -128,6 +146,7 @@
     
         function open_task_point_modal(id)
         {
+            $('#task_user_point_form input[name="user_id"]').val(id);
             $('#task_complete_point_modal').modal('show');
         }
     

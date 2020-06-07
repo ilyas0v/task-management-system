@@ -27,11 +27,14 @@ Route::group(['prefix' => 'admin' , 'middleware' => ['auth'] ], function(){
         Route::post('tasks/{id}/assign',              'TaskController@assign')->name('tasks.assign')->middleware('project_attendance');
         Route::post('tasks/{id}/comment',             'TaskController@comment')->name('tasks.comment')->middleware('project_attendance');
         Route::get('tasks/{id}/complete',             'TaskController@complete')->name('tasks.complete');
+        Route::post('tasks/{id}/point',               'TaskController@give_point')->name('tasks.point');
         Route::resource('tasks',                      'TaskController')->middleware('project_attendance');
     });
 
     Route::get('/read-notification/{id}',         'NotificationController@read')->name('notifications.read')->middleware('auth');
 
+    Route::get('/account/edit',                   'AccountController@edit')->name('account.edit');
+    Route::put('/account/update',                 'AccountController@update')->name('account.update');
 });
 
 

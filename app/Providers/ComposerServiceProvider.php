@@ -50,8 +50,11 @@ class ComposerServiceProvider extends ServiceProvider
                 $user_id = $notification->data['owner_user_id'];
                 $project_id = $notification->data['project_id'];
                 
-                $user    = \App\User::findOrFail($user_id);
-                $project = \App\Project::findOrFail($project_id);
+                $user    = \App\User::find($user_id);
+                $project = \App\Project::find($project_id);
+
+                if(!$user || !$project)
+                    continue;
     
                 $N[] = [
                         'id'         => $notification->id,
@@ -62,8 +65,12 @@ class ComposerServiceProvider extends ServiceProvider
             {
                 $user_id = $notification->data['user_id'];
                 $task_id = $notification->data['task_id'];
-                $user    = \App\User::findOrFail($user_id);
-                $task    = \App\Task::findOrFail($task_id);
+
+                $user    = \App\User::find($user_id);
+                $task    = \App\Task::find($task_id);
+
+                if(!$user || !$task)
+                    continue;
 
                 $N[] = [
                         'id'             => $notification->id,
