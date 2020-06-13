@@ -25,9 +25,10 @@
                                                 <th>Operations</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="user_list_body">
+                                        <button  @click="showUsers()">SHOW</button>
 
-                                            @foreach($users as $u)
+                                            <!-- @foreach($users as $u)
                                                 <tr>
                                                     <td>{{ $u->id }}</td>
                                                     <td>{{ $u->name }}</td>
@@ -44,7 +45,25 @@
                                                         </form>
                                                     </td>
                                                 </tr>
-                                            @endforeach
+                                            @endforeach -->
+
+
+                                                <tr v-for="user in users">
+                                                    <td v-html="user.id"></td>
+                                                    <td v-html="user.name"></td>
+                                                    <td></td>
+                                                    <td></td>
+
+                                                    <td>
+                                                        <a href="" class="btn btn-secondary">Edit</a>
+
+                                                        <form action="" method="POST" onsubmit="return confirm('Silmek istediyinizden eminsinizmi?')">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <input type="submit" class="btn btn-danger" value="Delete">
+                                                        </form>
+                                                    </td>
+                                                </tr>
                                         
                                         </tbody>
                                     </table>
@@ -58,4 +77,51 @@
                     </div>
                 </div>
             </div>
+@endsection
+
+
+@section('javascript')
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+    <script>
+    
+    var app = new Vue({
+        el: '#user_list_body',
+        data: {
+            users: [
+                @foreach($users as $user)
+                    {
+                        id    : {{ $user->id }},
+                        name  : '{{ $user->name }}',
+                    },
+                @endforeach
+            ]
+        },
+
+        mounted(){
+            this.fetchUsers();
+        },
+
+
+        methods: {
+            fetchUsers: function()
+            {
+                fetch('http://localhost:8000/api/users')
+                .then(function(res){
+                    return res.json();
+                }).then(function(res){
+                    this.users = res.data;
+                    console.log(this.users)
+                });
+            },
+
+            showUsers: function()
+            {
+                console.log(this.users);
+            }
+        }
+    });
+    
+    </script>
 @endsection
