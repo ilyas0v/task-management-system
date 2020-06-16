@@ -11,7 +11,7 @@
                         @if(\Auth::user()->has_permission('dashboard'))
                         <li>
                             <a href="/admin">
-                                <i class="fas fa-map-marker-alt"></i>Dashboard</a>
+                                <i class="fas fa-map-marker-alt"></i>@lang('dashboard.Dashboard')</a>
                         </li>
                         @endif
 
@@ -19,7 +19,7 @@
                         @if(\Auth::user()->has_permission('permissions'))
                             <li>
                                 <a href="{{ route('permissions.index') }}">
-                                    <i class="fas fa-key"></i>Permissions</a>
+                                    <i class="fas fa-key"></i>@lang('dashboard.Permissions')</a>
                             </li>
                         @endif
 
@@ -27,7 +27,7 @@
                         @if(\Auth::user()->has_permission('user_roles'))
                             <li>
                                 <a href="{{ route('user_roles.index') }}">
-                                    <i class="fas fa-users"></i>Roles</a>
+                                    <i class="fas fa-users"></i>@lang('dashboard.Roles')</a>
                             </li>
                         @endif
 
@@ -35,7 +35,7 @@
                         @if(\Auth::user()->has_permission('users'))
                         <li>
                             <a href="{{ route('users.index') }}"">
-                                <i class="fas fa-user"></i>Users</a>
+                                <i class="fas fa-user"></i>@lang('dashboard.Users')</a>
                         </li>
                         @endif
 
@@ -43,7 +43,7 @@
                         @if(\Auth::user()->has_permission('projects'))
                         <li>
                             <a href="{{ route('projects.index') }}"">
-                                <i class="fas fa-user"></i>Projects</a>
+                                <i class="fas fa-user"></i>@lang('dashboard.Projects')</a>
                         </li>
                         @endif
 
@@ -52,7 +52,7 @@
 
                         <li class="has-sub">
                             <a class="js-arrow" href="#">
-                                <i class="fas fa-desktop"></i>My projects</a>
+                                <i class="fas fa-desktop"></i>@lang('dashboard.My projects')</a>
                             <ul class="list-unstyled navbar__sub-list js-sub-list">
                                 @foreach(\Auth::user()->my_projects as $project)
                                     <li>
@@ -68,7 +68,7 @@
 
                         <li class="has-sub">
                             <a class="js-arrow" href="#">
-                                <i class="fas fa-desktop"></i>Projects</a>
+                                <i class="fas fa-desktop"></i>@lang('dashboard.Projects')</a>
                             <ul class="list-unstyled navbar__sub-list js-sub-list">
                                 @foreach(\Auth::user()->projects as $project)
                                     <li>

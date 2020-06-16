@@ -109,6 +109,24 @@
                                         </div>
                                     </div>
                                 </div>
+
+
+                                <!-- LANG MENU -->
+
+
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{ config('app.locale') }}</button>
+                                    <ul class="dropdown-menu" style="width:50px;">
+                                        <li><a href="{{ route('lang.change', 'az') }}">az</a></li>
+                                        <li><a href="{{ route('lang.change', 'en') }}">en</a></li>
+                                    </ul>
+                                </div> 
+
+
+
+                                <!-- LANG MENU END -->
+
+
                                 <div class="account-wrap">
                                     <div class="account-item clearfix js-item-menu">
                                         <div class="image">

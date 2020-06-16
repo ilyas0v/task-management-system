@@ -11,7 +11,7 @@
 |
 */
 
-Route::group(['prefix' => 'admin' , 'middleware' => ['auth'] ], function(){
+Route::group(['prefix' => 'admin' , 'middleware' => ['auth', 'language'] ], function(){
 
     Route::get('/',  'DashboardController@index')->name('dashboard.index');
 
@@ -41,4 +41,12 @@ Route::group(['prefix' => 'admin' , 'middleware' => ['auth'] ], function(){
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
 Route::post('logout',   'Auth\LoginController@logout')->name('logout');
+ 
+Route::get('/gmail/login',     'GmailLoginController@redirect')->name('gmail.login');
+Route::get('/gmail/callback',  'GmailLoginController@callback')->name('gmail.callback');
 
+
+Route::get('test',          'UserController@test');
+
+
+Route::get('change-lang/{locale}', 'LanguageController@change')->name('lang.change');

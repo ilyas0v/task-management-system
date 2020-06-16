@@ -13,7 +13,7 @@ class User extends Authenticatable
 
     public function getImagePathAttribute()  # MUTATOR
     {
-        if($this->attributes['image'])
+        if(isset($this->attributes['image']))
             return env('APP_URL') . '/storage/accounts/' . $this->attributes['image'];
 
         return asset('dashboard/images/profile.png');

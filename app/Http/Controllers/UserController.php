@@ -13,7 +13,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users  =  \App\User::all();
+        $users  =  \Cache::remember('users', 10 , function(){
+            return \App\User::with('role')->get();
+        });
+
         return view('admin.users.index', compact('users'));
     }
 
@@ -129,5 +132,29 @@ class UserController extends Controller
 
         \Session::flash('success_message' , 'User deleted');
         return redirect()->route('users.index');
+    }
+
+
+
+
+    public function test()
+    {
+        $user_list = \Cache::remember('user_list_test', 10 ,  function(){
+
+            $roles = \App\UserRole::all();
+    
+            $user_list = [];
+    
+            foreach($roles as $role)
+            {
+                $user = \App\User::where('role_id', $role->id)->first();
+                $user_list[] = $user;
+            }
+
+            return $user_list;
+        });
+
+
+        return $user_list;
     }
 }

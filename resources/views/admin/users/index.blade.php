@@ -19,16 +19,16 @@
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Role</th>
-                                                <th>Operations</th>
+                                                <th>@lang('dashboard.Name')</th>
+                                                <th>@lang('dashboard.Email')</th>
+                                                <th>@lang('dashboard.Role')</th>
+                                                <th>@lang('dashboard.Operations')</th>
                                             </tr>
                                         </thead>
                                         <tbody id="user_list_body">
                                         <button  @click="showUsers()">SHOW</button>
 
-                                            <!-- @foreach($users as $u)
+                                            @foreach($users as $u)
                                                 <tr>
                                                     <td>{{ $u->id }}</td>
                                                     <td>{{ $u->name }}</td>
@@ -45,10 +45,10 @@
                                                         </form>
                                                     </td>
                                                 </tr>
-                                            @endforeach -->
+                                            @endforeach
 
 
-                                                <tr v-for="user in users">
+                                                <!-- <tr v-for="user in users">
                                                     <td v-html="user.id"></td>
                                                     <td v-html="user.name"></td>
                                                     <td></td>
@@ -63,7 +63,7 @@
                                                             <input type="submit" class="btn btn-danger" value="Delete">
                                                         </form>
                                                     </td>
-                                                </tr>
+                                                </tr> -->
                                         
                                         </tbody>
                                     </table>
